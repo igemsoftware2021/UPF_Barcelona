@@ -1,4 +1,4 @@
-# WELCOME TO ARIA's ALPHANEURO!!
+# WELCOME TO ARIA's ALPHANEURO!
 In this repository you will find the set of notebooks that we have used to create AlphaNeuro for the iGEM 2021 competition:
 
 Organization:
