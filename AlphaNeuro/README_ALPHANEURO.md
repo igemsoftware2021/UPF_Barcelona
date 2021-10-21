@@ -5,7 +5,7 @@ Organization:
   notebook and the data to be used. Keep in mind that you will need to change the paths of the data and your desired location for the output.
   We would also like to remember that inside the notebooks there are more guidelines on how to run the code and further explanation of the function of each cell.
   Specific details of each model:
-    1.1 Main Discriminator: Contains the separate data and specific cells of code to generate the final data to be input in the network. If you wish to run the 3-class version, you
+    1.1 Main Discriminator: Contains the separate data and specific cells of code to generate the final data to be input in the network. If you wish to run the 3-class version,you
     should remove the file "essential.txt" from your data folder. In case of the 4-class model, no further changes are needed.
     
     1.2 Promiscuity: The notebook contains a cell to generate the data with the labels from raw fasta files in aminoacid sequence, however, the csv final data file is already
