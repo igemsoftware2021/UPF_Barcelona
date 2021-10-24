@@ -168,10 +168,10 @@ class AlphaMine():
             
             try:
              
-                 AlphaMine.preprocess()
-                 
-                 AlphaMine.start()
-                 
+                AlphaMine.preprocess()
+                
+                AlphaMine.start()
+            
             except Exception as e: 
                 
                 print("Sorry, there was a problem with the previous command...")
@@ -186,15 +186,22 @@ class AlphaMine():
         
             try:
              
-                 genomes_path = input("Genomes path? ")
-                  
-                 pangenome_type = input("Pangenome type? 0 for core, 1 for complete. ")
-                 
-                 pangenome = AlphaMine.pangenomize(genomes_path, pangenome_type)
-                 
-                 AlphaMine.save_seqset(pangenome, "pangenome")
-                 
-                 AlphaMine.start()
+                genomes_path = input("Genomes path? ")
+                
+                asking = True
+                
+                while asking:      
+                    try:
+                        pangenome_type = int(input("Pangenome type? 0 for core, 1 for complete. "))
+                        asking = False
+                    except:
+                        print("ERROR: please, enter a valid pangenome type")
+                
+                pangenome = AlphaMine.pangenomize(genomes_path, pangenome_type)
+                
+                AlphaMine.save_seqset(pangenome, "pangenome")
+                
+                AlphaMine.start()
                  
             except Exception as e: 
                 
@@ -203,19 +210,23 @@ class AlphaMine():
             
          
         """
-        This instruction allows the computation of the pangenome in a group of sequence sets.
-        To do so, it first computes the complete pangenome of resistant and susceptible 
-        genomes, and finally subtracts them.
+        This instruction implements the algorithm for resistome commputation,
+        using complete pangenomes, their intersection and a subtraction to the
+        resistant pangenome to obtain the differential genes.
         """
         def find_resistome():
             
              try:
              
-                resistant_pangenome = AlphaMine.pangenomize("r_genomes", 0)
-                susceptible_pangenome = AlphaMine.find_pangenome("s_genomes", 0)
+                resistant_pangenome = AlphaMine.pangenomize("r_genomes", 1)
                 
-                AlphaMine.save_seqset(resistant_pangenome, "resistant_pangenome")
-                AlphaMine.save_seqset(susceptible_pangenome, "susceptible_pangenome")
+                susceptible_pangenome = AlphaMine.pangenomize("s_genomes", 1)
+                
+                intersection_pangenome = AlphaMine.intersection(resistant_pangenome, susceptible_pangenome)
+                 
+                resistome = AlphaMine.subtract_B_to_A(resistant_pangenome, intersection_pangenome)
+   
+                AlphaMine.save_seqset(resistome, "resistome")
                 
                 print("Resistome computed!")
                 
@@ -444,9 +455,16 @@ class AlphaMine():
     operations based on sequence sets, so it is connected to 
     the rest of the system to recieve instructions and parameters.
     """
-
     class Pangee():
         
+        
+        """
+        This is the alignment-free comparator, that analyzes
+        the frequencies of different kmers and computes
+        the cosine distance between the vectors constructed.
+        The optimal kmer size is computed using a scale 
+        law related to genome's information theory.'
+        """
         def kengine(seq1, seq2):
                  
             k = int(math.log((len(seq1)+len(seq2))/2,4))
@@ -469,9 +487,14 @@ class AlphaMine():
                 
             return np.dot(vec1, vec2)/(np.linalg.norm(vec1)*np.linalg.norm(vec2))*100
             
+                
         
-        
-        def compare(pangenome_type, ref_genome, genome, sim_threshold, len_margin, lengths, length):
+        """
+        This function applies the progressive set reduction algorithm
+        to construct core pangenomes, which are the theoretical set
+        intersection between the candidate genomes.
+        """
+        def compare_for_core(ref_genome, genome, sim_threshold, len_margin, lengths, length):
                               
             found = False
                     
@@ -486,7 +509,7 @@ class AlphaMine():
                 seq2 = genome[index_gen]
                 
                 similarity = AlphaMine.Pangee.kengine(seq1,seq2)
-             
+                
                 if similarity > sim_threshold:
                     
                     found = True
@@ -543,33 +566,115 @@ class AlphaMine():
                 
                 
             return [seq, lengths]
+        
+        
+        """
+        This function applies the progressive set extension algorithm
+        to construct complete pangenomes, which are the theoretical set
+        union between the candidate genomes.
+        """
+        def compare_for_complete(ref_genome, genome, sim_threshold, len_margin, lengths, length):
+                                                    
+            seq = 0
+            
+            not_found = 0
+            analyzed = 0
+      
+            gene_margin = int(length*len_margin)
+            
+            for j in range(0, gene_margin):
+                                            
+                if length+j in lengths[1]:
+   
+                    index_ref = lengths[0].index(length)
+                    index_gen = lengths[1].index(length+j)
+            
+                    seq1 = genome[index_ref]
+                    seq2 = ref_genome[index_gen]
+                    
+                    similarity = AlphaMine.Pangee.kengine(seq1,seq2)
+                    
+                    analyzed += 1
+                    
+                    if similarity < sim_threshold:
+                        
+                        not_found += 1
+                        
+                        lengths[1].pop(index_gen)
+                        
+               
+                if length-j in lengths[1]:
+   
+                    index_ref = lengths[0].index(length)
+                    index_gen = lengths[1].index(length-j)
+            
+                    seq1 = genome[index_ref]
+                    seq2 = ref_genome[index_gen]
+            
+                    similarity = AlphaMine.Pangee.kengine(seq1,seq2)
+  
+                    analyzed += 1
+     
+                    if similarity < sim_threshold:
+                
+                        not_found += 1
+                        
+                        lengths[1].pop(index_gen)
+                                     
+            if not_found == analyzed:
+                
+                if not_found > 0:
+                
+                    seq = seq1
+       
+            return [seq, lengths]
                         
         
         def analyze(pangenome_type, genome, ref_genome, sim_threshold, len_margin):
-                  
-               
-           lengths = [[len(seq) for seq in ref_genome], [len(seq) for seq in genome]]
+                 
             
            trials = 0
            
-           proto_pangenome = []
+           if pangenome_type == 0:
+               lengths = [[len(seq) for seq in ref_genome], [len(seq) for seq in genome]]
+               proto_pangenome = []
+           if pangenome_type == 1:
+               proto_pangenome = ref_genome
+               lengths = [[len(seq) for seq in genome], [len(seq) for seq in ref_genome]]
                         
            for i in range(len(lengths[0])):
                
                trials += 1
         
                AlphaMine.loadingBar(trials,len(lengths[0]),3)
-        
-               seq,lengths = AlphaMine.Pangee.compare(pangenome_type,
-                                                      ref_genome, 
-                                                      genome, 
-                                                      sim_threshold, 
-                                                      len_margin, 
-                                                      lengths, 
-                                                      lengths[0][i])
                
-               proto_pangenome.append(seq)
+               
+               if pangenome_type == 0:
+        
+                   seq,lengths = AlphaMine.Pangee.compare_for_core(ref_genome, 
+                                                          genome, 
+                                                          sim_threshold, 
+                                                          len_margin, 
+                                                          lengths, 
+                                                          lengths[0][i])
+                   
+                   
+                   proto_pangenome.append(seq)
+                   
               
+               if pangenome_type == 1:    
+                   
+                    seq,lengths = AlphaMine.Pangee.compare_for_complete(ref_genome, 
+                                                        genome, 
+                                                        sim_threshold, 
+                                                        len_margin, 
+                                                        lengths, 
+                                                        lengths[0][i])
+                    
+                    if isinstance(seq, int) == False:
+                        proto_pangenome.append(seq)
+               
+             
            pangenome = []
                       
            for gene in proto_pangenome:
@@ -584,23 +689,46 @@ class AlphaMine():
                 pangenome = ref_genome
   
            return pangenome
+        
+        """
+        This is the method implementent the subtraction.
+        
+        """  
+        def A_minus_B(genomeA, genomeB):
+        
+           i = 0  
+           difference = []
+           for seqA in genomeA:   
+               found = False
+               AlphaMine.loadingBar(i+1,len(genomeA),3)
+               i += 1
+               for seqB in genomeB:
+                   similarity = AlphaMine.Pangee.kengine(seqA,seqB)
+                   if similarity > AlphaMine.sim_thresh:
+                       found = True
+                       break
+               if not found:
+                   difference.append(seqA)
+                  
+  
+           return difference
                                     
         def pangenome_loadingBar(count,total,size,pangenome_size):
             percent = float(count)/float(total)*100
             sys.stdout.write("\r" + "Elements: " + str(int(pangenome_size)) + ". Progress: " +  str(int(count)).rjust(3,'0')+"/"+str(int(total)).rjust(3,'0') + ' |' + '='*int(percent/10)*size + ' '*(10-int(percent/10))*size + '|') 
        
-    
         
+        """
+        This is the general function which manages the specific
+        algorithm to compute a certain type of pangenome.
+        
+        """         
         def compute_pangenome(genome_paths, sim_threshold, pangenome_type, len_margin):
         
             genomes = []
             genome_seqs = []
-              
-            print("")
-            print("B U I L D I N G  C O R E  P A N G E N O M E")
-            print("_________________________________________________")
-            print(" ")
-                
+            ref_genome = None
+            
             print("Loading genomes")
             for i in range(0, len(genome_paths)):
                 
@@ -610,14 +738,12 @@ class AlphaMine():
                 seqs = len(seq_list)
                 genomes.append(seq_list)
                 genome_seqs.append(seqs)
-        
-            print("")
-            print("Selecting genome with smaller number of element candidates")
-                    
+                
             found = False
             
             too_short = 0
             
+            print("\nFiltering aberrant genomes")
             while not found:
                 
                ref_genome_index = genome_seqs.index(min(genome_seqs))
@@ -631,18 +757,48 @@ class AlphaMine():
                else:
                    
                    found = True
-            
-            ref_genome = genomes[ref_genome_index]
-            
+                   
             print(str(too_short), "genomes had too few elements and were deleted")
-            print("The reference minimal genome presents",str(len(ref_genome)),"elements")
-            print(" ")
+    
+                    
+            if pangenome_type == 0:
+                
+                print("")
+                print("B U I L D I N G    C O R E    P A N G E N O M E")
+                print("_________________________________________________")
+                print(" ")
+                print("")
+                print("Selecting genome with smaller number of element candidates")
+                
+                ref_genome_index = genome_seqs.index(min(genome_seqs))   
+                ref_genome = genomes[ref_genome_index]
+             
+                print("The reference minimal genome presents",str(len(ref_genome)),"elements")
+                print(" ")
+                print("Removing reference genome from collection")
+                
+            if pangenome_type == 1:
+                
+                print("")
+                print("B U I L D I N G    C O M P L E T E    P A N G E N O M E")
+                print("_________________________________________________")
+                print(" ")
+                print("")
+                print("Selecting genome with larger number of element candidates")
+                
+                ref_genome_index = genome_seqs.index(max(genome_seqs))   
+                ref_genome = genomes[ref_genome_index]
+                   
+                print("The reference maximal genome presents",str(len(ref_genome)),"elements")
+                print(" ")
+ 
+                
             print("Removing reference genome from collection")
-          
-            pangenome = ref_genome
+            
             genomes.pop(ref_genome_index)
             genome_seqs.pop(ref_genome_index)
-            
+            pangenome = ref_genome
+  
             print(" ")
             print("Current elements found in the core pangenome:", len(ref_genome))            
             print(" ")
@@ -674,8 +830,93 @@ class AlphaMine():
                 print("Pangenome built!")
         
             return pangenome
+
+    """
+    This function is used to compute the intersection
+    between two genomes as very simple core pangenome.
+    
+    """        
+    def intersection(genome_A, genome_B):
+            
+        genomes = [genome_A, genome_B]
+        genome_seqs = [len(genome_A), len(genome_B)]
+        ref_genome = None
         
+        print("Loading genomes")
+          
+       
+        print("")
+        print("C O M P U T I N G    I N T E R S E C T I O N")
+        print("_________________________________________________")
+        print(" ")
+        print("")
+        print("Selecting genome with smaller number of element candidates")
         
+        ref_genome_index = genome_seqs.index(min(genome_seqs))   
+        ref_genome = genomes[ref_genome_index]
+        
+        prob_genome_index = genome_seqs.index(max(genome_seqs))   
+        prob_genome = genomes[prob_genome_index]
+     
+        print("The reference minimal genome presents",str(len(ref_genome)),"elements")
+        print(" ")
+    
+        intersection = ref_genome
+        
+    
+        print(" ")
+        print("A N A L Y S I N G   G E N O M E S")
+        print("-------------------------------------------------")
+        print(" ")
+        
+    
+        intersection = AlphaMine.Pangee.analyze(0,
+                                             prob_genome, 
+                                             intersection, 
+                                             AlphaMine.sim_thresh, 
+                                             AlphaMine.len_margin) 
+
+        
+        if len(intersection) > 0:
+           
+            print("")
+            print("Intersection computed!")
+    
+        return intersection  
+    
+    """
+    This function is used to compute the difference
+    between two genomes, in the form:
+    
+    DIFFERENCE = GENOME_A - GENOME_B
+    
+    """
+        
+    def subtract_B_to_A(genome_A, genome_B):
+                
+        print("Loading genomes")
+          
+       
+        print("")
+        print("C O M P U T I N G    S U B T R A C T I O N")
+        print("_________________________________________________")
+        print(" ")
+       
+        print(" ")
+        print("A N A L Y S I N G   G E N O M E S")
+        print("-------------------------------------------------")
+        print(" ")
+        
+    
+        subtracted = AlphaMine.Pangee.A_minus_B(genome_A, genome_B) 
+  
+        if len(subtracted) > 0:
+           
+            print("")
+            print("Subtraction computed!")
+    
+        return subtracted
+
 
 
 if __name__ == "__main__":
@@ -690,5 +931,7 @@ if __name__ == "__main__":
     """
     AlphaMine.start()
         
+        
+   
         
    
