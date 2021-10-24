@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+#In order to work properly, ARIABuilder needs the following modules.
 import os
 import numpy as np
 import sys
@@ -9,14 +10,22 @@ import pandas as pd
 from Bio.Seq import Seq
 
 
-
+#This is the main class, which contains the required functions.
 class ARIABuilder():
-       
+     
+"""  
+     This functions saves sequence sets in text files, 
+     separating sequences with lines.
+     """
      def save_seqset(seqset, name): 
         with open(name+".txt", 'w') as f:
             for seq in seqset:
                 f.write("%s\n" % seq)     
     
+     """
+     This functions is intended to preprocess the information in the CSV 
+     files and to convert it into a group of sequence sets for further processing.
+     """
      def preprocessing():
          
         if not os.path.exists('data'):
@@ -72,29 +81,19 @@ class ARIABuilder():
             virulent.append([])
             
         
-        for i in range(len(r)):
-            
+        for i in range(len(r)): 
             for j in range(len(r_mechanisms)):
-                
-                if r_mechanisms[j] in r[i][0]:
-                    
+                if r_mechanisms[j] in r[i][0]:        
                     resistant[j].append(r[i][1])
-                    
-                    
-        for i in range(len(p)):
-            
-            for j in range(len(p_mechanisms)):
-                
-                if p_mechanisms[j] in p[i][0]:
-                    
+                              
+        for i in range(len(p)):    
+            for j in range(len(p_mechanisms)):           
+                if p_mechanisms[j] in p[i][0]:       
                     promiscous[j].append(p[i][1])
                     
         for i in range(len(v)):
-            
-            for j in range(len(v_mechanisms)):
-                
-                if v_mechanisms[j] in v[i][0]:
-                    
+            for j in range(len(v_mechanisms)):              
+                if v_mechanisms[j] in v[i][0]:           
                     virulent[j].append(r[i][1])
                     
         if not os.path.exists('sequences/resistance'):
@@ -113,36 +112,31 @@ class ARIABuilder():
         for i in range(len(virulent)):
             ARIABuilder.save_seqset(virulent[i], "sequences/virulence/"+v_mechanisms[i])
 
-
-     def loadingBar(count,total,size):
-        
-        percent = float(count)/float(total)*100
-        sys.stdout.write("\r" + str(int(count)).rjust(3,'0')+"/"+str(int(total)).rjust(3,'0') + ' [' + '='*int(percent/10)*size + ' '*(10-int(percent/10))*size + ']') 
-               
+     # A simple function to show sets in terminal.    
      def show_list(element_list):
          
          print("----------------------------------")
          for element in element_list:
              print(element)
-             
+      
+     # A simple function to show sets of sets in the terminal.  
      def show_dict(element_dict):
          
          print("----------------------------------")
          for key in element_dict.keys():
-             print(key.upper()+": "+(", ".join(element_dict[key]))+".")
+             print(key.upper()+": "+(", ".join(element_dict[key]))+".")f
             
              
-     def create_directory(path):
-         
-         if not os.path.exists(path):
-             os.makedirs(path)
-            
-     
+     #A simple function to load lists from text files.
      def load_file(path):
          
          return open(path).read().splitlines()
-            
-    
+                   
+       
+     """
+     This function loads the annotations on the sequences to analyze once they have been
+     properly preprocessed and organized with the previous functions.
+     """
      def load_tags():
          
           antibiotics = os.listdir("data/profiles")
@@ -196,7 +190,10 @@ class ARIABuilder():
           
           return resistance_mechanisms, promiscuity_mechanisms, virulence_mechanisms, class_num
           
-          
+     """     
+     Once the tags are received, they are used to load and classify the sequences of 
+     interest, which will act as a base to create target templates.
+     """
      def load_sequences(r_classes, p_classes, v_classes):
          
           sequences = []
@@ -220,6 +217,12 @@ class ARIABuilder():
           
           return sequences
       
+     """
+     With a starting pool of DNA sequences, the system must filter those 
+     that will never work. This implies those, for instance, that do not
+     have a properly defined PAM sequence, which is fundamental for the
+     CRISPR/Cas system to act.
+     """
      def filter_sequences(sequences):
          
           filtered_sequence_num = 0
@@ -244,7 +247,13 @@ class ARIABuilder():
                   
           return filtered_sequences
            
-
+     """
+      This is the core function that creates potential target candidates
+      from a single sequences. To do so, it finds the initial position of
+      the PAMs found, and extracts 30 upstream bases: thus, this includes
+      both the 20 nucleotides target template per se, and some contextual
+      information that will use for effectivity calculation.
+     """
      def generate_templates(seq):
      
          templates = []
@@ -269,7 +278,13 @@ class ARIABuilder():
                                                      
          return templates
 
-             
+     """        
+     This is the bulk function that, using the previous one,
+     computes for each sequence in the filtered pool the 
+     target candidates. Moreover, it also filters those
+     candidates that do not present a proper GC content 
+     in the spacer-complement to promote their general stability.
+     """
      def create_templates(sequences):
          
          
@@ -317,7 +332,16 @@ class ARIABuilder():
         
          return templates, target_dictionaries
      
-     
+     """
+     This is the core function capable of evaluating a target template 
+     future effectivity by looking at the sequence structure per se,
+     but also contemplating the non-linear interactions of adyacent bases.
+     To do so, it implements the mathematical function that Doench et al 
+     produced with a logistic classifier, and incorporates the weights they
+     provided in the Supplementary Table 9 of their paper
+     Rational design of highly active sgRNAs for CRISPR-Cas9-mediated gene inactivation
+     """
+       
      def score_template(template):
                   
         seq_weights = [
@@ -365,7 +389,12 @@ class ARIABuilder():
         return score
     
     
-          
+     """
+     This is the bulk function that applies the previous one
+     to all the templates produced. The idea is to leave only
+     the best target template for each sequence, so there is
+     one possibility per surviving marker.
+     """
      def filter_templates(templates):
          
           filtered_template_num = 0
@@ -394,7 +423,12 @@ class ARIABuilder():
           print("Filtered templates: ", filtered_template_num)
                   
           return filtered_templates
-         
+        
+     """
+     Once each sequence shows only one potential template,
+     this function is used to select the Nth best candidates
+     for each of the classes.
+     """
             
      def select_templates(filtered_templates, N):
                   
@@ -426,6 +460,13 @@ class ARIABuilder():
           
           return selected_templates
       
+      """
+      With the proper templates selected, now this function 
+      produced the array design by making their complement,
+      transcribing them to RNA and coupling them with their marker.
+      This process is repeated for each teamplate in each row,
+      so in the end N^2 RNA spacer templates.
+      """
      def create_biosensor_array(selected_templates, sequences, target_dictionaries):
          
           print(" ")
@@ -450,6 +491,11 @@ class ARIABuilder():
           return biosensor_array
       
       
+      """
+      This last function takes the array design, and it simply saves
+      it as a text file explaining which position is requiered for 
+      each biosensor, and what are the sequences involved.
+      """
      def save_array(biosensor_array, r_tags, p_tags, v_tags):
          
           m_tags = r_tags+p_tags+v_tags
@@ -486,11 +532,23 @@ class ARIABuilder():
                 
           ARIABuilder.save_seqset(design_instructions, "biosensor_array_design")
                   
-                       
+  
+"""
+This is the worfklow of the entire system.
+
+1. Data is preprocessed and preparated.
+2. Sequence pool is loaded from the previously generated files.
+3. Sequences are filtered searching for PAM motifs.
+4. Target templates for each sequence are generated.
+5. The target templates are filtered by effectivity, leaving one per sequences.
+6. The remaining templates are subjected to a selection process, so the Nth best of each class are selected.
+7. The information provided is used to design the biosensors' spacers.
+8. The design is saved in a txt file.
+"""
           
 if __name__ == "__main__":
-    
-    
+       
+
     ARIABuilder.preprocessing()
     
     r_tags, p_tags, v_tags, N = ARIABuilder.load_tags()
