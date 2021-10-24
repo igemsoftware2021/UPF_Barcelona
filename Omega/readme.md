@@ -45,7 +45,7 @@ IRIS is the multiplatform computer vision application that automatically process
 
 Alpha systems are intended to provide useful knowledge, but to fulfill our purpose we need a way to embed said knowledge in a platform that, with sufficient generalizability, can turn it into power to analyze reality and predict what its properties are. This is the premise behind Omega, but it is precisely OmegaCore that embodies this definition in its purest form.
 
-![alt text](https://2021.igem.org/wiki/images/0/01/T--UPF_Barcelona--omegacore_anim.GIF)
+![OmegaCore](animation2.gif)
 
 OmegaCore is a system that seeks to capture, from a bottom-up approach, how the dangerous behaviors of resistant bacteria emerge through the potential interactions of their constituent mechanisms. For this, it focuses on generating lightweight Convolutional Neural Networks (CNN), the so-called subunits, which are trained to separately evaluate the absence or presence of each of the behaviors of interest: that is, whether or not the whole is the sum of its parts. 
 
