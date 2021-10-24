@@ -11,7 +11,15 @@ import os
 import numpy as np
 
 
-# Connection Data
+          
+"""
+In this first section, the connecton parameters are preapred.
+This includes, for instance, to automatically extract the IP 
+of the machine in which the server is executed, to define
+the port, to start the listening connection and to define
+the login data for the service address, that is, the email
+from which the reports are going to be sent.
+"""
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.connect(("8.8.8.8", 80))
 host = s.getsockname()[0]
@@ -29,6 +37,12 @@ SENDER = "SERVICE_ADDRESS@PROVIDER.DOMAIN"
 PASSWORD = 'SERVICE_ADDRESS_PASSWORD'
 
 
+"""
+This simple function is used to load the neural subunits
+from the directory 'omegacore'. They are saved in a dictionary
+by their name, so then can be used for inference.
+"""
+
 def load_omegacore():
     
      omegacore = {}
@@ -41,7 +55,13 @@ def load_omegacore():
          
      return omegacore
          
-         
+"""
+The inference module is the one performing the analysis per se.
+If there are neural subunits availables, the emergent behaviors associated
+to those that provide a positive result are added to the report. 
+If there are not, the system is in TEST MODE, so the report is just the 
+number of positives per row.
+"""
 def inference(array, TEST_MODE):
     
      report = []
@@ -66,7 +86,13 @@ def inference(array, TEST_MODE):
          
      return report
               
-
+         
+"""
+This modules constructs the report message and sends it to the
+requester, both in text plane and html. Depending on the results
+obtained, or if the system is in TEST MODE, the response
+is adapted.
+"""
 def send_report(REQUESTER, REPORT, TEST_MODE, CLIENT):
     
     message = MIMEMultipart("alternative")
@@ -183,7 +209,16 @@ def send_report(REQUESTER, REPORT, TEST_MODE, CLIENT):
       
         print("Error: unable to send email")
 
-     
+    
+         
+"""
+This module is the core processing the data received from IRIS, 
+and implementing the communication protocol between them.
+If the message received is found to be an object, the inference-report
+pipeline is started. If not, it is seen as a string and analyzed using
+the command response structure. As a final note, it is also the one
+closing the connection when the request is completed.
+"""
 def process(message, TEST_MODE, CLIENT):
     
     packet_object = False
@@ -240,7 +275,13 @@ def process(message, TEST_MODE, CLIENT):
             print('{} disconnected'.format(address).encode('ascii'))
             addresses.remove(address)
 
-
+"""
+The manager is a simple module that is loaded in multiple threads,
+designed to control the interaction with one specific IRIS instance,
+so the information can flow between both parts in an ordered and structured 
+manner. Furthermore, it is able to stop the connection if a problem is detected,
+as an additional mechanism if the request cannot be completed properly.
+"""
 def manager(client, TEST_MODE):
     while len(clients) != 0:
         try:
@@ -255,6 +296,13 @@ def manager(client, TEST_MODE):
             addresses.remove(address)
             break
 
+"""
+The receptor is the listening function that constantly executes
+when the server is active. It waits for IRIS instances to connect,
+and when they do so, it saves them as current clients and start
+a managing thread for them.
+"""
+            
 def receptor(TEST_MODE):
     while True:
         
@@ -267,8 +315,15 @@ def receptor(TEST_MODE):
         thread = threading.Thread(target=manager, args=(client,TEST_MODE))
         thread.start()
 
-
-
+        
+"""
+This is the system workflow.
+1. The server search for the OmegaCore Subunits.
+2. If they are available, they are loaded and prepared.
+3. If not, a message is shown to the user explaining that inference is not possible
+and that the system goes into TEST MODE.
+4. One way or the other, the receptor is started.
+"""
    
 if __name__ == "__main__":
     
