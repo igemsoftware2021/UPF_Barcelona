@@ -60,7 +60,7 @@ A biosensor-designing system that, given a set of DNA markers, uses word frequen
 # Omega
 On the other hand, Omega modules are intended to generate easy-to-use analytic power, predictive and diagnostic capabilities. The three systems are found on the 'Omega' directory.
 
-![alt text](https://2021.igem.org/wiki/images/3/3b/T--UPF_Barcelona--omega_diagram.jpg)
+![alt text](https://2021.igem.org/wiki/images/1/18/T--UPF_Barcelona--omega_diagram.jpg)
    
 
 ## OmegaCore
