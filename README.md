@@ -8,12 +8,12 @@
   <ol>
     <li>
       <a href="#about-the-project"> About ARIA's Software</a>
-    <li><a href="#usae">AlphaMine</a></li>
-    <li><a href="#usae">AlphaNeuro</a></li>
-    <li><a href="#usae">ARIABuilder</a></li>
-    <li><a href="#usae">OmegaCore</a></li>
-    <li><a href="#usae">IRIS</a></li>
-    <li><a href="#usae">OmegaServer</a></li>
+    <li><a href="##AlphaMine">AlphaMine</a></li>
+    <li><a href="##AlphaNeuro">AlphaNeuro</a></li>
+    <li><a href="##ARIABuiler">ARIABuilder</a></li>
+    <li><a href="##OmegaCore">OmegaCore</a></li>
+    <li><a href="##IRIS">IRIS</a></li>
+    <li><a href="##OmegaServer">OmegaServer</a></li>
   </ol>
 </details>
 
