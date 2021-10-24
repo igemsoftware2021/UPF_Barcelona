@@ -8,8 +8,25 @@ import os
 
  
     
-
+"""
+This is the class that act as a template for producing OmegaCore's Subunit.
+It contains functions to generate them, load the data, create the datasets,
+building their architecture, training, evaluating and exporting them.
+"""
 class OmegaSubunit():
+ 
+ 
+    """
+    Subunit generative method.
+    
+    1. Load the target profile and parameters.
+    2. Load the training data.
+    3. Create training and test set.
+    4. Train.
+    5. Evaluate.
+    
+    The export is done separately, by the main program.
+    """
     
     def __init__(self, TARGET_PROFILE, BATCH_SIZE, LEARNING_RATE, DROP):
         
@@ -17,7 +34,7 @@ class OmegaSubunit():
         self.BATCH_SIZE = BATCH_SIZE
         self.LEARNING_RATE = LEARNING_RATE
         self.DROP = DROP
-        self.N = 10
+        self.N = None
         
         print("")
         print("TARGET PROFILE: ", self.TARGET_PROFILE)
@@ -79,7 +96,12 @@ class OmegaSubunit():
             data.append(int(line[1]))
                 
         return data
-
+       
+    """
+    Function to load the data.
+    The tensors are extracted from the NumpyArray.
+    The labels are obtained from its parent CSV.
+    """
     def load_data(self):
         
         print("______________________________________________________________")
@@ -95,6 +117,14 @@ class OmegaSubunit():
         
         return data, labels
      
+          
+    """
+    Function to create the train and test set.
+    75% of samples for the first.
+    25% of samples for the second.
+    Furthermore, the matrix dimensions are obtained for the next steps.
+    Finally, the datasets are properly divided into batches.
+    """
     def create_datasets(self, data, labels):
     
         ds_all = tensorflow.data.Dataset.from_tensor_slices((data,labels))
@@ -151,7 +181,18 @@ class OmegaSubunit():
         
         return ds_train, ds_test
        
-    
+    """
+    This method is used to build the CNN architecture. 
+    There are 3 threads, one for cross-class analysis,
+    one for mono-class analysis and one for mixed analysis.
+    Each thread presents the same structure, with three blocks of
+    increasing filter size, including:
+    1. The convolution per se, with its size adapted to the input tensor.
+    2. Batch normalization for increaed stability.
+    3. Dropout for more generalization.
+    4. Max pooling for block-to-block transfer
+    5. LeakyReLU activation function for better performance.
+    """    
     def build_architecture(self):
     
         input_shape = Input(shape=(self.N, self.N, 1))
@@ -229,7 +270,11 @@ class OmegaSubunit():
                   
         return ARCHITECTURE
 
-     
+    """
+    This is the function to train the subunits. First builds the
+    architecture, the creates patience and checkpoint callbacks,
+    and then proceeds to fit the model.
+    """ 
     def train_subunit(self, ds_train, ds_test):
         
         self.CNN = self.build_architecture()
@@ -249,12 +294,25 @@ class OmegaSubunit():
         self.CNN.fit(ds_train, epochs=self.EPOCHS, validation_data = ds_test, verbose=1, callbacks=[checkpoint_callback, patience_callback])
         
         print("Training finished!")
+        
+        
+    """
+    This is methos is used to evaluate that the checkpoint
+    loaded is reaching the expected, maximum validation accuracy.
+    """ 
  
     def evaluate_subunit(self, ds_test):
         
         self.CNN.load_weights('./weight_checkpoint')     
         self.CNN.evaluate(ds_test, verbose=1)
         
+    """
+    This simple function is used to export the resulting model
+    as an H5 file once the training and evaluation are finished.
+    The model is exported with the name of the target profile/behavior
+    it should detect, as this information is then used for building the
+    report during inference.
+    """ 
     def export_subunit(self):
         
         try:
@@ -269,6 +327,26 @@ class OmegaSubunit():
         
       
 if __name__ == "__main__":
+    
+   
+    """
+    This the workflow of the entire system.
+    
+    1. Load the data available and define the potential
+    subunits that may be trained by creating a profile list.
+    
+    2. If there are not profiles available, inform the user
+    and stop the execution.
+    
+    3. If there are profiles, ask the user if they want
+    to generate the corresponding subunits.
+    
+    4A. If yes, start the training cycle, producing one
+    trained subunit per profile and exporting it.
+    
+    4B. If not, stop execution.
+    
+    """
     
  
 
