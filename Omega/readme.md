@@ -45,6 +45,8 @@ IRIS is the multiplatform computer vision application that automatically process
 
 Alpha systems are intended to provide useful knowledge, but to fulfill our purpose we need a way to embed said knowledge in a platform that, with sufficient generalizability, can turn it into power to analyze reality and predict what its properties are. This is the premise behind Omega, but it is precisely OmegaCore that embodies this definition in its purest form.
 
+![alt text](https://2021.igem.org/wiki/images/0/01/T--UPF_Barcelona--omegacore_anim.GIF)
+
 OmegaCore is a system that seeks to capture, from a bottom-up approach, how the dangerous behaviors of resistant bacteria emerge through the potential interactions of their constituent mechanisms. For this, it focuses on generating lightweight Convolutional Neural Networks (CNN), the so-called subunits, which are trained to separately evaluate the absence or presence of each of the behaviors of interest: that is, whether or not the whole is the sum of its parts. 
 
 To achieve this, the system will be fed with simulated detection matrices, resulting from probing the genomes of interest with the design provided by ARIABuilder. The result of the process will be a collection of subunits (one for each situation of interest) as self-contained models, which can then be incorporated into an inference module. In this way, by adding the verdict of each one of these subunits, the inference module would determine the complete resistance profile of the sample in question.
@@ -85,6 +87,8 @@ Finally, the confusion matrix is displayed, the model is exported as an H5 file,
 # About IRIS
 
 With Alpha, we explored the possibility of turning data into useful information, and of translating that information into tools that can be practically brought into the lab. With OmegaCore, we have focused on how to convert this information into analytical power capable of evaluating the results produced by our bio-tools. The next step, then, consists of preparing an accessible interface with which the user can interact with all these systems. 
+
+![alt text](https://2021.igem.org/wiki/images/4/4e/T--UPF_Barcelona--iris_anim.GIF)
 
 This is the main objective of IRIS, the cross-platform application that we are developing to automatically scan the results of the detections and send them to the rest of Omega. In line with this premise, we divided the development of IRIS into two complementary stages: building the artificial vision system and generating the source code of an application that can be easily compiled on the different OS. 
 
@@ -142,6 +146,8 @@ Finally, the interface class is responsible for communicating the highest-level 
 OmegaCore is the source of analytical power that we need, and IRIS is the window allowing the user to translate reality into a problem on which said power can be applied. However, none of this makes any real sense if we do not build a bridge between both parties, between the human and the machine. 
  
 Faced with this situation, our proposal goes through OmegaServer, an inference system in the cloud that contains the OmegaCore subunits already trained, and that is capable of communicating over the internet with the IRIS application.
+
+![alt text](https://2021.igem.org/wiki/images/7/79/T--UPF_Barcelona--omegaA_anim.PNG)
  
 With this, the idea is allowing the user to make analysis requests to Omega directly, just with the device and an internet connection.  To do so, IRIS captures the array, processes it, and we include a communication module that automatically sends the detection matrix together with an email contact address to the OmegaServer. The last then runs its analysis and sends back a written report with the results as an email.
  
