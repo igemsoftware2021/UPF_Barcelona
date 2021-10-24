@@ -35,7 +35,7 @@ To materialize Alpha's and Omega's implementation, we have developed a collectio
  
 On the one hand, Alpha modules are focused on transforming data into distinct forms of valuable and usable knowledge. Here, each of them is presented in their own separate directory.
 
-![alt text](![image](https://user-images.githubusercontent.com/86624059/138577197-e3fa93f1-699c-4e60-aedc-217e58b228d5.png))
+![alt text](https://2021.igem.org/wiki/images/3/3b/T--UPF_Barcelona--alpha_diagram.jpg)
    
 ## AlphaMine
 An alignment-free genomic analysis system that can build core, shell, and cloud prokaryotic pangenomes by applying set-theory operations to genome collections. Based on word frequency methods and low-dimensional clustering, the system allows finding commonalities and differences between genomes, with no external support, and in a fast, flexible fashion. Thus, it can be used for the discovery and characterization of genomic subsystems.
@@ -62,6 +62,8 @@ A biosensor-designing system that, given a set of DNA markers, uses word frequen
 # Omega
 On the other hand, Omega modules are intended to generate easy-to-use analytic power, predictive and diagnostic capabilities. The three systems are found on the 'Omega' directory.
 
+![alt text](https://2021.igem.org/wiki/images/3/3b/T--UPF_Barcelona--omega_diagram.jpg)
+   
 
 ## OmegaCore
 A system to generate ensembles of lightweight 2D Convolutional Neural Networks that can be trained to analyze the emergence of resistant or pathological profiles in ARIA samples. To do so, each network subunit is focused on identifying the appearance of a particular dangerous behavior, based on the presence or absence of specific markers. By going through each of the subunits, the sum of behaviors detected in the sample can be combined into the pathogen’s resistance profile.
