@@ -10,8 +10,6 @@ AlphaMine is a modular, simple and flexible Python-based genomics software. To p
  
 AlphaMine is designed as a nested-class structure. Its core module, called Pangee, is the one directly manipulating the genomes, performing set operations, and constructing pangenomes. Then, the system is built on Pangee with the other parts, such as a preprocessor for data preparation, a command-line interface for better user control, or a managing mechanism to bridge between the higher-level instructions and the internal processes.
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 
 ## Rationale
 
@@ -42,7 +40,7 @@ As explained in the rationale, the idea of all this approach is to analyze a col
  
 The process is practically identical when computing the complete pangenome and the three components mentioned above: core, shell, and cloud. There are some minor details changing, and different strategies to minimize the workload, but this makes possible to design the approaches needed to compute the four types of pangenome.
 
-Start with a group of N genomes, which we call the library.Define one of them as reference, and eliminate it from the library. Depending on the desired type of pangenome, the specific choice and subsequent steps diverge.
+Start with a group of N genomes, which we call the library. Define one of them as reference, and eliminate it from the library. Depending on the desired type of pangenome, the specific choice and subsequent steps diverge.
 
 On the one hand, we have the complete pangenome. Select as reference the genome with the highest number of sequences. For each sequence in the analyzed set, it is checked whether there is an ortholog the reference set. When there is not, a negative is counted. If after finishing the loop there are as many negatives as elements in the reference set, it means that the sequence in question is new, so it is added to the reference set. On the contrary, if there are fewer negatives, this implies some orthology is detected, so the sequence is already present. In that way, with more and more iterations, the size of the reference set becomes larger. Thus, at the last iteration, the resulting set will be a pangenome that contains all those sequences that appeared in each of the input genomes.
 
