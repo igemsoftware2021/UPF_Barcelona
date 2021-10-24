@@ -8,11 +8,20 @@ import pandas as pd
 from Bio import SeqIO
 import pyrodigal
 
+# This is the main class that contains the entire system.
 class AlphaMine():
     
     sim_thresh = 70
     len_margin = 0.1
     active = True
+    
+    """
+    This a menu function designed to interface with the user 
+    when AlphaMine is used in a standalone manner. It takes
+    text inputs from the terminal, and sends them to the 
+    Command Manager, the centralized system that starts
+    the tasks when required.
+    """
     
     def start():
         
@@ -58,22 +67,30 @@ class AlphaMine():
                 print("Type 'help' to see available commands")
             
           
-    
+    # A support function to render the progress on an ongoing process.
     def loadingBar(count,total,size):
         
         percent = float(count)/float(total)*100
         sys.stdout.write("\r" + str(int(count)).rjust(3,'0')+"/"+str(int(total)).rjust(3,'0') + ' [' + '='*int(percent/10)*size + ' '*(10-int(percent/10))*size + ']') 
         
+    # A simple function to save sequence sets in text files.
     def save_seqset(seqset, name):
         
         with open(name+".txt", 'w') as f:
             for seq in seqset:
                 f.write("%s\n" % seq)        
-                  
+    
+    # The link with the preprocessor.
     def preprocess():
         
         AlphaMine.Preprocessor.generate_seq_library()
             
+    """
+    The link to order Pangee a pangenomic coperation.
+    It loads the files needed from the directory provided
+    and prepares them for processing, together with 
+    the right parameters.
+    """
     def pangenomize(genomes_path, pangenome_type):
         
         files = os.listdir(genomes_path)
@@ -108,10 +125,15 @@ class AlphaMine():
         
         return pangenome
         
-    
-        
+    """
+    The Command Manager is the centralized structure responding to specific 
+    instructions. It can work coupled with the user interface, in standalone mode,
+    or just by taking AlphaMine as some module in a broader pipeline, a case
+    in which the commands can be called directly.
+    """    
     class Commands():
         
+        # This instruction shows the possible operations to use.
         def show_help():
             
             print("\n")
@@ -141,7 +163,7 @@ class AlphaMine():
             print("Saves the result in a txt file.")
             print("\n")
             
-            
+        # This instruction allows the creation of a seqset library for further processing. 
         def preprocess_AMR_data():
             
             try:
@@ -155,6 +177,11 @@ class AlphaMine():
                 print("Sorry, there was a problem with the previous command...")
                 print(e)
                 
+        """
+        This instruction allows the computation of the pangenome in a group of sequence sets.
+        The user can specify if a complete or core pangenome is required, and the directory 
+        where the data is found.
+        """
         def find_pangenome():
         
             try:
@@ -174,16 +201,21 @@ class AlphaMine():
                 print("Sorry, there was a problem with the previous command...")
                 print(e)
             
-                 
+         
+        """
+        This instruction allows the computation of the pangenome in a group of sequence sets.
+        To do so, it first computes the complete pangenome of resistant and susceptible 
+        genomes, and finally subtracts them.
+        """
         def find_resistome():
             
              try:
              
                 resistant_pangenome = AlphaMine.pangenomize("r_genomes", 0)
-                # susceptible_pangenome = AlphaMine.find_pangenome("s_genomes", 0)
+                susceptible_pangenome = AlphaMine.find_pangenome("s_genomes", 0)
                 
                 AlphaMine.save_seqset(resistant_pangenome, "resistant_pangenome")
-                # AlphaMine.save_seqset(susceptible_pangenome, "susceptible_pangenome")
+                AlphaMine.save_seqset(susceptible_pangenome, "susceptible_pangenome")
                 
                 print("Resistome computed!")
                 
@@ -195,10 +227,25 @@ class AlphaMine():
                 print(e)
         
     
-        
+    """
+    This is the class that preparates the data for further processing.
+    To do, it generates a library of sequences sets identified by
+    a reference genome ID present in the original data. Thus,
+    this information can then be used to guide all the operations
+    that may be done after.
+    """
     
     class Preprocessor():
         
+            
+        """
+        This function is used to convert raw fasta files into sequences
+        sets separated in units that have been identified as genes.
+        To do so, it first assembles the entire sequence of the genome,
+        and then applies Pyrodigal, a non-supervised ORF-finding
+        module created by @althonos. Finally, it stores the resulting 
+        sequence set into a text file with a specific ID.
+        """
         def fasta_to_seqset(filename, input_path, output_path, index):
             
             if not os.path.exists(output_path):
@@ -253,6 +300,14 @@ class AlphaMine():
             return index
         
         
+        """
+        This is the bulk function that applies the procedure above
+        to the entire dataset, so the library can be generated. In order
+        to achieve the desired results, the system investigates the CSV
+        with the genome annotations, so only those cases that are only
+        Resistant or only Susceptible are selected, and properly separated
+        in two different directories.
+        """
         def generate_seq_library():
             
             g_path = 'data/genomes'
@@ -381,7 +436,14 @@ class AlphaMine():
             for i in range(len(only_resistant_genomes)):       
                  AlphaMine.loadingBar(i+1,r_genomes,3)
                  index = AlphaMine.fasta_to_seqset(only_resistant_genomes[i], g_path, "r_genomes/", index)    
+         
             
+    """
+    Pangee is AlphaMine's core. This class
+    contains all the tools to perform pangenomic and genomic
+    operations based on sequence sets, so it is connected to 
+    the rest of the system to recieve instructions and parameters.
+    """
 
     class Pangee():
         
@@ -407,6 +469,7 @@ class AlphaMine():
                 
             return np.dot(vec1, vec2)/(np.linalg.norm(vec1)*np.linalg.norm(vec2))*100
             
+        
         
         def compare(pangenome_type, ref_genome, genome, sim_threshold, len_margin, lengths, length):
                               
@@ -525,7 +588,9 @@ class AlphaMine():
         def pangenome_loadingBar(count,total,size,pangenome_size):
             percent = float(count)/float(total)*100
             sys.stdout.write("\r" + "Elements: " + str(int(pangenome_size)) + ". Progress: " +  str(int(count)).rjust(3,'0')+"/"+str(int(total)).rjust(3,'0') + ' |' + '='*int(percent/10)*size + ' '*(10-int(percent/10))*size + '|') 
-            
+       
+    
+        
         def compute_pangenome(genome_paths, sim_threshold, pangenome_type, len_margin):
         
             genomes = []
@@ -615,6 +680,14 @@ class AlphaMine():
 
 if __name__ == "__main__":
              
+              
+    """
+    To use AlphaMine in a standalone fashion,
+    just call the start method and the interface will be 
+    instanced as the system's control mechanisms.
+    To use it as a module, just call the commands
+    in the Command Manager with the parameters required.
+    """
     AlphaMine.start()
         
         
