@@ -1,6 +1,14 @@
 <div id="top"></div>
 
 
+# Introduction
+
+In this directory are the three main modules that make up Omega.
+
+OmegaCore is the system that generates the neural networks that would be responsible for providing the analytical power.
+IRIS is the multiplatform computer vision application that automatically processes samples, extracts important information and outsources it via the internet. OmegaServer is the server-client inference system that can load OmegaCore neural networks, and use them to run remote analysis for samples sent by instances of the IRIS application.
+
+
 <!-- TABLE OF CONTENTS -->
   <summary>Table of Contents</summary>
   <ol>
@@ -11,30 +19,9 @@
         <li><a href="#Subunit Generation Workflow">Subunit Generation Workflow</a></li>
       </ul>
     </li>
-    
-    <li><a href="#About IRIS">IRIS</a>
-       <ul>
-        <li><a href="#The artificial vision system">The artificial vision system</a></li>
-        <li><a href="#The application">The application</a></li>
-      </ul>
-    </li>
-    
-    <li><a href="#About OmegaServer">OmegaServer</a>
-       <ul>
-        <li><a href="#Design of the Communication Architecture">Design of the Communication Architecture</a></li>
-        <li><a href="#Creation of the Inference Server">Creation of the Inference Server</a></li>
-        <li><a href="#Request-based Communication Protocol">Request-based Communication Protocol</a></li>
-      </ul>
-    </li>
-    
+ 
   </ol>
 
-# Introduction
-
-In this directory are the three main modules that make up Omega.
-
-OmegaCore is the system that generates the neural networks that would be responsible for providing the analytical power.
-IRIS is the multiplatform computer vision application that automatically processes samples, extracts important information and outsources it via the internet. OmegaServer is the server-client inference system that can load OmegaCore neural networks, and use them to run remote analysis for samples sent by instances of the IRIS application.
 
 # About OmegaCore
 
