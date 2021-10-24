@@ -14,14 +14,6 @@
   </ol>
 </details>
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-## License
-
-Distributed under the AGPL 3.0 License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 
 # About IRIS
@@ -30,6 +22,7 @@ With Alpha, we explored the possibility of turning data into useful information,
 
 This is the main objective of IRIS, the cross-platform application that we are developing to automatically scan the results of the detections and send them to the rest of Omega. In line with this premise, we divided the development of IRIS into two complementary stages: building the artificial vision system and generating the source code of an application that can be easily compiled on the different OS. 
 
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## The artificial vision system
 
@@ -56,6 +49,8 @@ After doing this, the angle of deviation found in the detection array is used to
 The analysis function also runs in real-time, but only while the presence of a detection array is being detected. Once it receives the preprocessed mask, it refines the edges and, executes another Grayscale + Gaussian Filter + Adaptive Thresholding transformation bloc. This results in a binary image that only shows intensity contrasting regions, as the lines conforming the array or the stains in the positive cells. 
 
 At this point, knowing the number of rows and columns in the array and thanks to the angle correction made before, a simple grid can be generated so that its cells overlap with those of the array. Next, for each of these cells in the binary image, the number of non-null pixels is evaluated. Because of how the transformations are parameterized, those cells where there is a region with intensity contrast have a greater number of non-null pixels. Thus, by establishing a counting threshold, the system can distinguish when a cell is positive and when it is negative, and this information can be transferred into a binary matrix: the output of the system.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
  
 ## The application
  
@@ -73,6 +68,8 @@ The processing class contains the artificial vision system per se, with the prop
  
 Finally, the interface class is responsible for communicating the highest-level structures of the application, such as user interaction, with the computer vision system. This includes the rendering mechanisms that show the video signal on the screen (with specific Kivy methods, based on textures), the management of control variables according to internal processes and the data produced by the artificial vision system, the measurement of user inputs, or operating the communications module with which IRIS links to Omega.
 
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 
 # About OmegaCore
 
@@ -82,6 +79,8 @@ OmegaCore is a system that seeks to capture, from a bottom-up approach, how the 
 
 To achieve this, the system will be fed with simulated detection matrices, resulting from probing the genomes of interest with the design provided by ARIABuilder. The result of the process will be a collection of subunits (one for each situation of interest) as self-contained models, which can then be incorporated into an inference module. In this way, by adding the verdict of each one of these subunits, the inference module would determine the complete resistance profile of the sample in question.
 
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 ## Data Organization
 
 To perform the training correctly, the system will need the input data to be arranged in a specific way. Specifically, a directory per behavior is required. These behaviors can be resistances to different antibiotics, the development of multiple pathological activities, or distinct levels of genetic-sharing capabilities material. Within each folder, there must be a NumpyArray that contains the tensors of the detection arrays that exhibit this behavior and of the arrays that do not. In addition, the NumpyArray must be accompanied by a CSV that includes the one-hot encoding specifying whether each tensor is positive or negative. 
@@ -90,11 +89,15 @@ This implies that matrices can coexist in several classes since those that are p
 
 The mechanism that we propose to generate the matrices consists of a simple script that creates a tensor of zeros, takes as input the design made by ARIABuilder, loads the genome of interest, and checks if there is a region for each template with sufficient complementarity. If yes, change the corresponding position of the tensor to 1, otherwise, go to the next one. The result would finally be exported as a proper detection matrix, and a specific one-hot encoding based on how the genome was labeled. Repeating this methodology, the whole NumpyArrays and CSVs would be built.
 
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 ## Convolutional Neural Network Subunit Architecture
 
 Due to the simplicity of the input information that reaches each of the subunits, their architecture is very light, although it has peculiarities. As the input layer, we take a single channel tensor with the size of the detection array. Next, we copy said tensor in three threads that go in parallel. The first use square filters, the second horizontal filters, and the third vertical filters. Why are we doing this? Well, because we want the subunits to study specifically the correlations between array markers that participate in the same mechanism (rows of the matrix, horizontal filter), array markers that affect different mechanisms (columns of the matrix, filter vertical), and mixed groups of both (rows and columns, square filter). 
 
 Each of the threads is practically identical in structure, being made up of the same basic blocks: Convolution to process the content of a subregion, BatchNormalization to promote stability, LeakyReLu activation function for greater efficiency, MaxPooling for transfer between blocks, and dropout to increase generalizability. Each thread consists of two of these blocks, the first with smaller filters and the second with larger filters. At the end of each thread, the results are concatenated and converted to a vector, which is passed through a small layer of dense neurons. The output is normalized and finally introduced into a sigmoid function, which produces the final result: how likely is the behavior in question to emerge for that set of input markers. With this, we intend to help the subunits to infer in a holistic way the latent probability distributions behind the patterns, trying to capture and interpret the maximum of key nuances.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Subunit Generation Workflow
 
@@ -104,6 +107,7 @@ Subsequently, a callback focused on validation accuracy is established to stop t
 
 Finally, the confusion matrix is displayed, the model is exported as an H5 file, ready for integration into another module. The iteration is completed, so a new training cycle for the next class.
 
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## About OmegaServer
 
@@ -115,11 +119,15 @@ With this, the idea is allowing the user to make analysis requests to Omega dire
  
 Following this strategy, we consider the computational load can be better controlled and managed. Furthermore, such a structure allows for improvements in the prediction mechanisms that could be made rapidly effective for all users in a centralized way, which is key for an early development stage as ours. We have called this infrastructure prototype the Omega Architecture. In the following subsections, we explain the details and principles of its various modules.
 
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 ## Design of the Communication Architecture
 
 The Omega Architecture is nothing more than a very simple mechanism based on sockets, which seeks to test a client-server communication between IRIS and an inference module incorporating OmegaCore’s subunits. But what is a socket? Well, the definition can change a lot depending on the context, but a socket can be understood as a structure that allows two different processes, even separated on two different machines, to exchange any flow of data, generally in a reliable, orderly, and packetized manner. Thus, these are interfaces that can work with the TCP/IP Internet protocols to enable effective communication between various devices over the network. As this is a very flexible and powerful technology, and Python integrates different native tools to manage sockets, we decided to use them as the cornerstone for our communication system. 
 
 The first step was to adapt IRIS’ communication module for this purpose. Thus, we added a socket-based connection configuration, and two threads to run in parallel: one to receive data, and the other one to send it. The response thread listened for incoming data packets and decoded them expecting to find strings, so depending on the instruction received one specific process could be started. One of the processes, for instance, was to send the detection array, which involved using pickles to transform the objection into a stream of bytes, so it could be properly transmitted.  The writing thread simply waited for input, and when ready, encoded and sent it. Once IRIS was ready, the next step was to build the other side of the coin.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Creation of the Inference Server
 
@@ -131,6 +139,8 @@ Now, the processing module decodes the incoming messages and evaluates whether t
 
 The inference module simply loads the models one by one and organizes them in a dictionary. Each model name is the target profile it should detect, so in that way, they are properly tagged. After that, its input is independently passed to each of the subunits, and the outputs are stored as a one-hot encoded vector, which is then returned. Thus, the communication module could use the information in this vector to prepare an email (using the email, smtplib, and ssl libraries) that was sent to the requester, informing on what behaviors had been identified on the sample
 
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 ## Request-based Communication Protocol
 
 For the architecture that we have proposed to work, the communication needed to be carried out in an organized and structured way. This is important since, as the system is designed, the data to be exchanged is different depending on the situation, so both parties must be prepared to receive it properly. Furthermore, eventually, the OmegaServer would have to manage several instances of IRIS, which makes this managing issue even more complicated. 
@@ -139,4 +149,5 @@ Bearing this in mind, we proposed a simple communication protocol that would gua
 
 Then, IRIS transmitted the user's contact address and a label to identify it as an email, so OmegaServer responded with an array request.  When IRIS received such instruction, it encoded the array as bytes and sent it as a data stream to OmegaServer, which decoded the message and continued with the inference process. Once this was done, IRIS closed the connection: the request had been completed.
 
+<p align="right">(<a href="#top">back to top</a>)</p>
 
