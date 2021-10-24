@@ -15,8 +15,9 @@ To materialize Alpha's and Omega's implementation, we have developed a collectio
 
 
 
-<!-- TABLE OF CONTENTS -->
-  <summary>Table of Contents</summary>
+
+
+# Table of contents
   <ol>
     <li>
       <a href="#about-the-project"> About ARIA's Software</a>
