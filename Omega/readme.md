@@ -1,7 +1,6 @@
 <div id="top"></div>
 
 
-
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -14,6 +13,12 @@
   </ol>
 </details>
 
+# Introduction
+
+In this directory are the three main modules that make up Omega.
+
+OmegaCore is the system that generates the neural networks that would be responsible for providing the analytical power.
+IRIS is the multiplatform computer vision application that automatically processes samples, extracts important information and outsources it via the internet. OmegaServer is the server-client inference system that can load OmegaCore neural networks, and use them to run remote analysis for samples sent by instances of the IRIS application.
 
 # About OmegaCore
 
