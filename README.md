@@ -35,6 +35,7 @@ To materialize Alpha's and Omega's implementation, we have developed a collectio
  
 On the one hand, Alpha modules are focused on transforming data into distinct forms of valuable and usable knowledge. Here, each of them is presented in their own separate directory.
 
+![alt text](![image](https://user-images.githubusercontent.com/86624059/138577197-e3fa93f1-699c-4e60-aedc-217e58b228d5.png))
    
 ## AlphaMine
 An alignment-free genomic analysis system that can build core, shell, and cloud prokaryotic pangenomes by applying set-theory operations to genome collections. Based on word frequency methods and low-dimensional clustering, the system allows finding commonalities and differences between genomes, with no external support, and in a fast, flexible fashion. Thus, it can be used for the discovery and characterization of genomic subsystems.
