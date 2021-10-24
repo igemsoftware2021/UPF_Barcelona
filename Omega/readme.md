@@ -21,15 +21,6 @@ IRIS is the multiplatform computer vision application that automatically process
       </ul>
     </li>
   
-     <li>
-      <a href="#About OmegaCore">OmegaCore</a>
-       <ul>
-        <li><a href="#Data Organization">Data Organization</a></li>
-        <li><a href="#Convolutional Neural Network Subunit Architecture">Convolutional Neural Network Subunit Architecture</a></li>
-        <li><a href="#Subunit Generation Workflow">Subunit Generation Workflow</a></li>
-      </ul>
-    </li>
-        
     <li>
       <a href="#About-IRIS">IRIS</a>
        <ul>
