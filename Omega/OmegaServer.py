@@ -24,9 +24,9 @@ server.listen()
 
 clients = []
 addresses = []
-port_mail = 465  # For SSL
-SENDER = "inference.omega@gmail.com"
-PASSWORD = 'new_omega_inference_pass'
+port_mail = 465  
+SENDER = "SERVICE_ADDRESS@PROVIDER.DOMAIN"
+PASSWORD = 'SERVICE_ADDRESS_PASSWORD'
 
 
 def load_omegacore():
