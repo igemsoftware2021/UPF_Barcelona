@@ -3,6 +3,8 @@
 
 
 # About ARIA's Software
+
+![alt text](https://2021.igem.org/wiki/images/f/f8/T--UPF_Barcelona--all_software.jpg)
  
 When dealing with antibiotic resistance, the key consists of properly assisting those who fight for the patients' health in the frontline. To do so, we consider it is necessary to effectively integrate, characterize and synthesize information. Why? Because by using the proper techniques to turn this knowledge into a strong analytic power, tools can be created and deployed to help health workers guide and execute the diagnostic, therapeutic, and managing processes that save lives.
 
@@ -10,7 +12,7 @@ That is precisely the cornerstone of ARIA's computational work, which we called 
 
 To materialize Alpha's and Omega's implementation, we have developed a collection of autonomous modules. Here, you will find a brief presentation for each of the systems developed.
 
-![alt text](https://2021.igem.org/wiki/images/f/f8/T--UPF_Barcelona--all_software.jpg)
+
 
 
 <!-- TABLE OF CONTENTS -->
