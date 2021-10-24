@@ -68,7 +68,7 @@ class Communication():
     def send_data(array, EMAIL):
         
         Communication.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        omega_IP = '192.168.1.141'
+        omega_IP = 'OMEGA_SERVER_IP'
         Communication.client.connect((omega_IP, 55555))
         Communication.array = array
         print("Communication established")
