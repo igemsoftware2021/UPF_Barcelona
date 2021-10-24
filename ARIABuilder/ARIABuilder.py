@@ -486,7 +486,7 @@ class ARIABuilder():
                   spacerRNA = complementary.transcribe()
                   array_row.append([spacerRNA, target_dictionaries[i][selected_templates[i][j]]])
               
-              array_row = random.shuffle(array_row)   
+              random.shuffle(array_row)   
               biosensor_array.append(array_row)
               
               
