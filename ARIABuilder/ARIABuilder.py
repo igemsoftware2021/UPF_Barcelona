@@ -8,6 +8,7 @@ import math
 import re
 import pandas as pd
 from Bio.Seq import Seq
+import random
 
 
 #This is the main class, which contains the required functions.
@@ -484,7 +485,8 @@ class ARIABuilder():
                   complementary = Seq(selected_templates[i][j]).complement()
                   spacerRNA = complementary.transcribe()
                   array_row.append([spacerRNA, target_dictionaries[i][selected_templates[i][j]]])
-                  
+              
+              array_row = random.shuffle(array_row)   
               biosensor_array.append(array_row)
               
               
