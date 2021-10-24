@@ -1,5 +1,9 @@
 # About AlphaNeuro
-In this repository you will find the set of notebooks that we have used to create AlphaNeuro for the iGEM 2021 competition:
+In this repository, you will find the set of notebooks that we have used to create AlphaNeuro for the iGEM 2021 competition.
+
+In the following section, a detailed description of how the system is organized is shown.
+
+![alt text](https://2021.igem.org/wiki/images/3/33/T--UPF_Barcelona--alphaneuro.GIF)
 
 Organization:
 
@@ -29,5 +33,3 @@ Organization:
     labels in different colormaps (RGB values).
 
 
-
-![alt text](https://2021.igem.org/wiki/images/3/33/T--UPF_Barcelona--alphaneuro.GIF)
