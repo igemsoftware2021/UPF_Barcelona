@@ -1,53 +1,4 @@
 <div id="top"></div>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
-
-<!-- PROJECT LOGO -->
-<br />
-<div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
-
-  <h3 align="center">Best-README-Template</h3>
-
-  <p align="center">
-    An awesome README template to jumpstart your projects!
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
-  </p>
-</div>
 
 
 
@@ -68,12 +19,9 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#usage">OmegaCore</a></li>
+    <li><a href="#roadmap">IRIS</a></li>
+    <li><a href="#contributing">OmegaServer</a></li>
   </ol>
 </details>
 
@@ -135,8 +83,8 @@ Distributed under the AGPL 3.0 License. See `LICENSE.txt` for more information.
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
-
-IRIS
+<!-- IRIS -->
+## IRIS
 
 With Alpha, we explored the possibility of turning data into useful information, and of translating that information into tools that can be practically brought into the lab. With OmegaCore, we have focused on how to convert this information into analytical power capable of evaluating the results produced by our bio-tools. The next step, then, consists of preparing an accessible interface with which the user can interact with all these systems. 
 
@@ -181,7 +129,7 @@ The processing class contains the artificial vision system per se, with the prop
 Finally, the interface class is responsible for communicating the highest-level structures of the application, such as user interaction, with the computer vision system. This includes the rendering mechanisms that show the video signal on the screen (with specific Kivy methods, based on textures), the management of control variables according to internal processes and the data produced by the artificial vision system, the measurement of user inputs, or operating the communications module with which IRIS links to Omega.
 
 
-OMEGACORE
+## OmegaCore
 
 Alpha systems are intended to provide useful knowledge, but to fulfill our purpose we need a way to embed said knowledge in a platform that, with sufficient generalizability, can turn it into power to analyze reality and predict what its properties are. This is the premise behind Omega, but it is precisely OmegaCore that embodies this definition in its purest form.
 
@@ -206,9 +154,7 @@ Subsequently, a callback focused on validation accuracy is established to stop t
 Finally, the confusion matrix is displayed, the model is exported as an H5 file, ready for integration into another module. The iteration is completed, so a new training cycle for the next class.
 
 
-
-
-OMEGASERVER
+## OmegaServer
 
 OmegaCore is the source of analytical power that we need, and IRIS is the window allowing the user to translate reality into a problem on which said power can be applied. However, none of this makes any real sense if we do not build a bridge between both parties, between the human and the machine. 
  
