@@ -23,13 +23,18 @@ We have a subgroup of those species, R, in which we observe the functionality pe
  
 Replace R and S with "Resistant" and "Susceptible" to a specific antibiotic, and the result of this approach will be a pool of genetic elements that may be supporting antibiotic resistance, by their action or absence. Consequently, this seems logical first step to understand, from bottom to top, this dangerous threat emerges. But, what is this "group of genetic elements characteristic of some type of organisms"? A collective super-genome? Be that as it may, something like this is necessary to make the approach possible.
 
- 
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
 ## On the pangenome
    
 Fortunately, genomics brings us a powerful concept that perfectly fits this key definition. The pangenome, or supragenome, describes the entire set of genes shared by a clade, a group of species, and it is a useful tool to unveil their insides beyond the traditional notion of "discrete", well-separated organisms. A complete pangenome can be divided into three different components: the core pangenome (genes shared by the entire clade), the shell pangenome (genes shared by two or more species in the clade), and the cloud pangenome (genes unique to one of the clade's species).
 
  
 If you know the pangenome, you gain a deeper understanding of the studied species' true nature. In that way, to materialize the methodology mentioned before, it is necessary to build a system capable of constructing the pangenomes for different collections of bacterial strains and to properly operate with them, so the elements of interest can be finally isolated.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
    
    
@@ -42,21 +47,6 @@ The result will be the resistome. This is the set of all sequences that only app
 Having obtained both the resistome and the vulnerome, the task of finding potential candidates is solved.
 
    
-
-
-## Defining a word frequency-based comparison algorithm
-
-In the context mentioned above, below we propose an algorithm to compare sequences of the word frequency-based type. This will focus on reducing the sequences to be compared to two vectors of the same size, and calculating the angle to separate them, from which the similarity per se will be estimated.
-
-We start from two sequences that we must compare. First, we must define a fixed size k for the words that we are going to create, the kmers. In the literature, there are fundamental mathematical relationships that allow us to estimate the optimal k from the size of the sequences that we are going to analyze, so we can leave this parameter defined. 
-
-Having already done this, we generate for each of the sequences its own set of kmers. This consists of an iterative process of going through the positions of the sequence and taking the following k-1 elements to form all possible kmers.
-
-With the derived set of each sequence, we calculate the union between both, and thus we obtain a new set. The total number of kmers that could exist in both sequences is contained in this new set. Taking each of its elements, and counting how many instances of these exist in both sequences, we will have created two vectors that represent the frequencies of the kmers. As the order has been defined by the union vector, which is unique, both vectors will be consistent.
-
-At this point, we simply have to calculate the cosine distance between both vectors, and multiply the number obtained by 100. The result will be the estimate of the percentage of similarity between both sequences.
-
-
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
@@ -74,3 +64,4 @@ At this point, we simply have to calculate the cosine distance between both vect
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
+
