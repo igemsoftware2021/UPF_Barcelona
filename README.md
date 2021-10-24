@@ -24,13 +24,13 @@ When dealing with antibiotic resistance, the key consists of properly assisting 
 
 That is precisely the cornerstone of ARIA's computational work, which we called Alpha and Omega. As the letters of the ancient alphabet from which they take their name, these two pieces draw the beginning and the end of a translational paradigm; two sides of the same coin that, if completed, could face this extremely complicated problem from start to finish.
 
-To materialize Alpha's and Omega's implementation, we have developed a collection of autonomous modules. Here, you will find a brief presentation for each of the systems developed, so you can access their specific page with all the detail. Finally, we will also show a discussion on their potential integration and a link to our iGEM GitHub Repository, where you will find the source code.
+To materialize Alpha's and Omega's implementation, we have developed a collection of autonomous modules. Here, you will find a brief presentation for each of the systems developed.
 
  
  
 # Alpha
  
-On the one hand, Alpha modules are focused on transforming data into distinct forms of valuable and usable knowledge.
+On the one hand, Alpha modules are focused on transforming data into distinct forms of valuable and usable knowledge. Here, each of them is presented in their own separate directory.
 
    
 ## AlphaMine
@@ -44,7 +44,7 @@ A biosensor-designing system that, given a set of DNA markers, uses word frequen
  
  
 # Omega
-On the other hand, Omega modules are intended to generate easy-to-use analytic power, predictive and diagnostic capabilities.
+On the other hand, Omega modules are intended to generate easy-to-use analytic power, predictive and diagnostic capabilities. The three systems are found on the 'Omega' directory.
 
 
 ## OmegaCore
