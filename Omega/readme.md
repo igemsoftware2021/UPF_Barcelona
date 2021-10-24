@@ -5,11 +5,9 @@
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-    <li><a href="#usage">OmegaCore</a></li>
+    <li><a href="#Introduction">OmegaCore</a></li>
     <li><a href="#roadmap">IRIS</a></li>
-    <li><a href="#contributing">OmegaServer</a></li>
+    <li><a href="#About OmegaServer">OmegaServer</a></li>
   </ol>
 </details>
 
