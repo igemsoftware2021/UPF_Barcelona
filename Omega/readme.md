@@ -15,6 +15,46 @@
 </details>
 
 
+# About OmegaCore
+
+Alpha systems are intended to provide useful knowledge, but to fulfill our purpose we need a way to embed said knowledge in a platform that, with sufficient generalizability, can turn it into power to analyze reality and predict what its properties are. This is the premise behind Omega, but it is precisely OmegaCore that embodies this definition in its purest form.
+
+OmegaCore is a system that seeks to capture, from a bottom-up approach, how the dangerous behaviors of resistant bacteria emerge through the potential interactions of their constituent mechanisms. For this, it focuses on generating lightweight Convolutional Neural Networks (CNN), the so-called subunits, which are trained to separately evaluate the absence or presence of each of the behaviors of interest: that is, whether or not the whole is the sum of its parts. 
+
+To achieve this, the system will be fed with simulated detection matrices, resulting from probing the genomes of interest with the design provided by ARIABuilder. The result of the process will be a collection of subunits (one for each situation of interest) as self-contained models, which can then be incorporated into an inference module. In this way, by adding the verdict of each one of these subunits, the inference module would determine the complete resistance profile of the sample in question.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## Data Organization
+
+To perform the training correctly, the system will need the input data to be arranged in a specific way. Specifically, a directory per behavior is required. These behaviors can be resistances to different antibiotics, the development of multiple pathological activities, or distinct levels of genetic-sharing capabilities material. Within each folder, there must be a NumpyArray that contains the tensors of the detection arrays that exhibit this behavior and of the arrays that do not. In addition, the NumpyArray must be accompanied by a CSV that includes the one-hot encoding specifying whether each tensor is positive or negative. 
+
+This implies that matrices can coexist in several classes since those that are positive in one will be negative in another and vice versa. Ideally, the negative examples should be selected from the widest possible variety of positives from the other classes, to promote the specificity of the trained subunits. Regarding the division between training and validation data, it is not necessary to add it, since OmegaCore will apply it automatically for each class. 
+
+The mechanism that we propose to generate the matrices consists of a simple script that creates a tensor of zeros, takes as input the design made by ARIABuilder, loads the genome of interest, and checks if there is a region for each template with sufficient complementarity. If yes, change the corresponding position of the tensor to 1, otherwise, go to the next one. The result would finally be exported as a proper detection matrix, and a specific one-hot encoding based on how the genome was labeled. Repeating this methodology, the whole NumpyArrays and CSVs would be built.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## Convolutional Neural Network Subunit Architecture
+
+Due to the simplicity of the input information that reaches each of the subunits, their architecture is very light, although it has peculiarities. As the input layer, we take a single channel tensor with the size of the detection array. Next, we copy said tensor in three threads that go in parallel. The first use square filters, the second horizontal filters, and the third vertical filters. Why are we doing this? Well, because we want the subunits to study specifically the correlations between array markers that participate in the same mechanism (rows of the matrix, horizontal filter), array markers that affect different mechanisms (columns of the matrix, filter vertical), and mixed groups of both (rows and columns, square filter). 
+
+Each of the threads is practically identical in structure, being made up of the same basic blocks: Convolution to process the content of a subregion, BatchNormalization to promote stability, LeakyReLu activation function for greater efficiency, MaxPooling for transfer between blocks, and dropout to increase generalizability. Each thread consists of two of these blocks, the first with smaller filters and the second with larger filters. At the end of each thread, the results are concatenated and converted to a vector, which is passed through a small layer of dense neurons. The output is normalized and finally introduced into a sigmoid function, which produces the final result: how likely is the behavior in question to emerge for that set of input markers. With this, we intend to help the subunits to infer in a holistic way the latent probability distributions behind the patterns, trying to capture and interpret the maximum of key nuances.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## Subunit Generation Workflow
+
+The subunit generation process follows these steps. First, the total number of classes to be analyzed is loaded. Next, the main loop that trains the neural networks is started, which will be executed as many times as classes have been detected. In each iteration, the dataset belonging to the class being analyzed is loaded and divided into two subsets: 75% for training and 25% for validation. Some of the loaded arrays are shown in the terminal for review, and then relatively small batches are generated. Once this is done, the model is defined and compiled. 
+
+Subsequently, a callback focused on validation accuracy is established to stop training if there is no improvement in a certain number of epochs, and another callback is defined to checkpoints during the process, also preserving the best results in validation accuracy. Having prepared all this, we proceed with the training per se. When finished, the evolution of the accuracy for training and validation is shown on the terminal to see if overfitting has occurred. The last model checkpoint is loaded, and its accuracy is re-evaluated with the validation set to check if it is correct. 
+
+Finally, the confusion matrix is displayed, the model is exported as an H5 file, ready for integration into another module. The iteration is completed, so a new training cycle for the next class.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+
 
 # About IRIS
 
@@ -71,45 +111,7 @@ Finally, the interface class is responsible for communicating the highest-level 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
-# About OmegaCore
-
-Alpha systems are intended to provide useful knowledge, but to fulfill our purpose we need a way to embed said knowledge in a platform that, with sufficient generalizability, can turn it into power to analyze reality and predict what its properties are. This is the premise behind Omega, but it is precisely OmegaCore that embodies this definition in its purest form.
-
-OmegaCore is a system that seeks to capture, from a bottom-up approach, how the dangerous behaviors of resistant bacteria emerge through the potential interactions of their constituent mechanisms. For this, it focuses on generating lightweight Convolutional Neural Networks (CNN), the so-called subunits, which are trained to separately evaluate the absence or presence of each of the behaviors of interest: that is, whether or not the whole is the sum of its parts. 
-
-To achieve this, the system will be fed with simulated detection matrices, resulting from probing the genomes of interest with the design provided by ARIABuilder. The result of the process will be a collection of subunits (one for each situation of interest) as self-contained models, which can then be incorporated into an inference module. In this way, by adding the verdict of each one of these subunits, the inference module would determine the complete resistance profile of the sample in question.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-## Data Organization
-
-To perform the training correctly, the system will need the input data to be arranged in a specific way. Specifically, a directory per behavior is required. These behaviors can be resistances to different antibiotics, the development of multiple pathological activities, or distinct levels of genetic-sharing capabilities material. Within each folder, there must be a NumpyArray that contains the tensors of the detection arrays that exhibit this behavior and of the arrays that do not. In addition, the NumpyArray must be accompanied by a CSV that includes the one-hot encoding specifying whether each tensor is positive or negative. 
-
-This implies that matrices can coexist in several classes since those that are positive in one will be negative in another and vice versa. Ideally, the negative examples should be selected from the widest possible variety of positives from the other classes, to promote the specificity of the trained subunits. Regarding the division between training and validation data, it is not necessary to add it, since OmegaCore will apply it automatically for each class. 
-
-The mechanism that we propose to generate the matrices consists of a simple script that creates a tensor of zeros, takes as input the design made by ARIABuilder, loads the genome of interest, and checks if there is a region for each template with sufficient complementarity. If yes, change the corresponding position of the tensor to 1, otherwise, go to the next one. The result would finally be exported as a proper detection matrix, and a specific one-hot encoding based on how the genome was labeled. Repeating this methodology, the whole NumpyArrays and CSVs would be built.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-## Convolutional Neural Network Subunit Architecture
-
-Due to the simplicity of the input information that reaches each of the subunits, their architecture is very light, although it has peculiarities. As the input layer, we take a single channel tensor with the size of the detection array. Next, we copy said tensor in three threads that go in parallel. The first use square filters, the second horizontal filters, and the third vertical filters. Why are we doing this? Well, because we want the subunits to study specifically the correlations between array markers that participate in the same mechanism (rows of the matrix, horizontal filter), array markers that affect different mechanisms (columns of the matrix, filter vertical), and mixed groups of both (rows and columns, square filter). 
-
-Each of the threads is practically identical in structure, being made up of the same basic blocks: Convolution to process the content of a subregion, BatchNormalization to promote stability, LeakyReLu activation function for greater efficiency, MaxPooling for transfer between blocks, and dropout to increase generalizability. Each thread consists of two of these blocks, the first with smaller filters and the second with larger filters. At the end of each thread, the results are concatenated and converted to a vector, which is passed through a small layer of dense neurons. The output is normalized and finally introduced into a sigmoid function, which produces the final result: how likely is the behavior in question to emerge for that set of input markers. With this, we intend to help the subunits to infer in a holistic way the latent probability distributions behind the patterns, trying to capture and interpret the maximum of key nuances.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-## Subunit Generation Workflow
-
-The subunit generation process follows these steps. First, the total number of classes to be analyzed is loaded. Next, the main loop that trains the neural networks is started, which will be executed as many times as classes have been detected. In each iteration, the dataset belonging to the class being analyzed is loaded and divided into two subsets: 75% for training and 25% for validation. Some of the loaded arrays are shown in the terminal for review, and then relatively small batches are generated. Once this is done, the model is defined and compiled. 
-
-Subsequently, a callback focused on validation accuracy is established to stop training if there is no improvement in a certain number of epochs, and another callback is defined to checkpoints during the process, also preserving the best results in validation accuracy. Having prepared all this, we proceed with the training per se. When finished, the evolution of the accuracy for training and validation is shown on the terminal to see if overfitting has occurred. The last model checkpoint is loaded, and its accuracy is re-evaluated with the validation set to check if it is correct. 
-
-Finally, the confusion matrix is displayed, the model is exported as an H5 file, ready for integration into another module. The iteration is completed, so a new training cycle for the next class.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-## About OmegaServer
+# About OmegaServer
 
 OmegaCore is the source of analytical power that we need, and IRIS is the window allowing the user to translate reality into a problem on which said power can be applied. However, none of this makes any real sense if we do not build a bridge between both parties, between the human and the machine. 
  
