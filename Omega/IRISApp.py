@@ -23,13 +23,25 @@ from kivymd.uix.label import MDLabel
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 import re   
   
+# This is the pattern for valid email identification.
 email_expression = '[^@]+@[^@]+\.[^@]+'  
 
+# This is a fixed size to ensure the scan view is properly visualized.
 Window.size = (1280, 720)
 
 
+"""
+This is the Communication Subsystem, intended to implent the 
+client-side of the Omega Architecture protocol. It includes a 
+manager to answer OmegaServer's commands transmit the array data 
+for subsequent processing and inference, and an initiation module to
+establish connection with OmegaServer, start requests and initiate 
+management threads.
+
+"""
 class Communication():
     
+    # Client-side protocol management.
     def manager(email):
         
         print("Manager active")
@@ -64,7 +76,7 @@ class Communication():
             
         print("Management finished")
       
-            
+    # Client-side protocol management.         
     def send_data(array, EMAIL):
         
         Communication.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -84,7 +96,28 @@ class Communication():
         
  
         
+"""
+This is the Computer Vision System per se. It includes:
 
+- A configuration function called before action to set all 
+  the necessary parameters.
+  
+- A general processing function that is executed in real-time,
+  provided that the CAPTURE MODE is active. It takes the general
+  frame captured, passes to a search function, and if the array is 
+  found, it is send to an analysis function intended to analyze
+  the array cells content. Apart from that, this is also
+  drawing a capture guide to assist the user during capture.
+  
+- A search function that detects the array in the general frame,
+  and extracts it as a corrected and preprocessed mask.
+  
+- An analysis function that transforms the preprocessed mask
+  into a binary matrix, encoding the positive and negative markers.
+  
+- A stop function to release the camera and finish processing.
+
+"""
 class Processor():
          
       def start():
@@ -273,10 +306,31 @@ class Processor():
 
 
 
+
 Window.clearcolor = (1, 1, 1, 1)
 screen_size = Window.size
 
-print(screen_size)
+
+        
+"""
+This is the Scanner class. It acts as an interface
+between the computer vision system and the app structure.
+It contains:
+
+- A setup function to prepare the scan view rendering and
+  establish a link with the app structure.
+- A scan function to manage inputs and outputs 
+  to the computer vision system and render the scan
+  views shown in the interface.
+- A control function that changes that state of 
+  the Scanner depending on its configuration 
+  and user inputs.
+- A request managing method.
+
+Furthermore, the Scanner can create dialogs to notify erros during
+processing, rendering and transmission.
+ 
+"""
 
 
 class Scanner():
@@ -377,6 +431,16 @@ class Scanner():
         Scanner.scan_requested = True
 
 
+              
+"""
+This is a method to build the initial, system configuration screen. 
+It allows the user to introduce both the contact address and 
+the desired array size (square).
+There are also two buttons, one to shift to capture mode and one to stop the 
+appliaction execution.
+Furthermore, the system can create dialogs to notify an invalid email
+or array size. 
+"""
 class ConfigScreen(Screen, MDApp):
     
     def __init__(self, **kwargs):
@@ -457,7 +521,14 @@ class ConfigScreen(Screen, MDApp):
         Window.close()
         
    
-
+"""
+This is a method to build the second, capture-oriented screen. 
+It renders the general frame captured by the camera, and if 
+an array is detected, a zoom, preprocessed and extracted render
+of the target per se. Furthermore, it also includes three buttons: 
+one to cancel the capture and return to the initial screen, 
+one to capture the array, and one to stop the application execution.
+"""
 
 class CaptureScreen(Screen, MDApp):
     
@@ -531,14 +602,25 @@ class CaptureScreen(Screen, MDApp):
         self.get_running_app().stop()
         Window.close()
    
-        
+"""
+This is the screen-shifting mechanism.
+"""
+
 class ScreenManagement(ScreenManager):
     def __init__(self, **kwargs):
         super(ScreenManagement, self).__init__(**kwargs)
 
 
+"""
+This is the application's main class.
+"""
+
 class IRIS(MDApp):
 
+    """
+    This method creates the interface for each screen,
+    combines them, and starts the internal cyclic processes.
+    """
     def build(self):   
         
                 
@@ -560,7 +642,8 @@ class IRIS(MDApp):
         app_structure.current = 'Configuration'
 
         return app_structure
-    
+      
+    # Auxiliar method to show dialogs with notifications over the interface.
     def show_dialog(self, message, header):
         
        
@@ -582,7 +665,8 @@ class IRIS(MDApp):
         
 
  
-
+      
+# IRIS is self-contained.
 if __name__ == "__main__":
     
     IRIS().run()
