@@ -39,15 +39,22 @@ On the one hand, Alpha modules are focused on transforming data into distinct fo
 ## AlphaMine
 An alignment-free genomic analysis system that can build core, shell, and cloud prokaryotic pangenomes by applying set-theory operations to genome collections. Based on word frequency methods and low-dimensional clustering, the system allows finding commonalities and differences between genomes, with no external support, and in a fast, flexible fashion. Thus, it can be used for the discovery and characterization of genomic subsystems.
 
+![AlphaMine](animation.gif)
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## AlphaNeuro
 An ensemble of 1D Convolutional Neural Networks that can be trained to identify whether an input DNA sequence is relevant for antibiotic resistance or pathogeny. If that is the case, it further analyzes if its role is specially related to a given resistance strategy, a virulence path, or some DNA-sharing mechanism. Its architecture has been conceived to be easily scalable to new cases, with more training data.
 
+
+![alt text](https://2021.igem.org/wiki/images/3/33/T--UPF_Barcelona--alphaneuro.GIF)
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## ARIABuilder
 A biosensor-designing system that, given a set of DNA markers, uses word frequency methods and construction rules to produce an optimized collection of gRNA target sequence templates for CRISPR/CAS detection. Each sequence is focused on a specific marker, so the system organizes the templates in a matrix-like structure defined by functional classes: the Antibiotic Resistance Inference Array.
+
+![alt text](https://2021.igem.org/wiki/images/3/3c/T--UPF_Barcelona--ariabuilder_anim.GIF)
  
 <p align="right">(<a href="#top">back to top</a>)</p>
  
