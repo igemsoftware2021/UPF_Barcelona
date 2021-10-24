@@ -36,7 +36,19 @@ If you know the pangenome, you gain a deeper understanding of the studied specie
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-   
+## Computing pangenomes
+
+As explained in the rationale, the idea of all this approach is to analyze a collection of bacterial strains: by comparing the ones that resist the antibiotic of interest and the ones that do not, the goal is to isolate what genetically differentiates them for further analysis. In the following subsections, a series of generalized algorithms associated to this task is defined. They are focused on implementing the basic set operations studied before, on the construction of all the types of pangenomes described and finally on how to apply all the concepts to solve the task.
+ 
+The process is practically identical when computing the complete pangenome and the three components mentioned above: core, shell, and cloud. There are some minor details changing, and different strategies to minimize the workload, but this makes possible to design the approaches needed to compute the four types of pangenome.
+
+Start with a group of N genomes, which we call the library.Define one of them as reference, and eliminate it from the library. Depending on the desired type of pangenome, the specific choice and subsequent steps diverge.
+
+On the one hand, we have the complete pangenome. Select as reference the genome with the highest number of sequences. For each sequence in the analyzed set, it is checked whether there is an ortholog the reference set. When there is not, a negative is counted. If after finishing the loop there are as many negatives as elements in the reference set, it means that the sequence in question is new, so it is added to the reference set. On the contrary, if there are fewer negatives, this implies some orthology is detected, so the sequence is already present. In that way, with more and more iterations, the size of the reference set becomes larger. Thus, at the last iteration, the resulting set will be a pangenome that contains all those sequences that appeared in each of the input genomes.
+
+On the other hand, for the core pangenome, select as reference the genome with the smallest number of sequences. Each time that a sequence of reference appears to have an ortholog in the set analyzed, it is included in the selected group and the search for that genome stops. If that is not the case, the sequence is excluded. In this case, when updating, the size of the reference set becomes smaller. Thus, at the last iteration, the resulting set will be a pangenome that contains only those genes presented orthology across the entire collection of input genomes.
+
+ 
    
 ## Resistome-finding Algorithm
 
