@@ -2,8 +2,18 @@
 
 
 
+# About ARIA's Software
+ 
+When dealing with antibiotic resistance, the key consists of properly assisting those who fight for the patients' health in the frontline. To do so, we consider it is necessary to effectively integrate, characterize and synthesize information. Why? Because by using the proper techniques to turn this knowledge into a strong analytic power, tools can be created and deployed to help health workers guide and execute the diagnostic, therapeutic, and managing processes that save lives.
+
+That is precisely the cornerstone of ARIA's computational work, which we called Alpha and Omega. As the letters of the ancient alphabet from which they take their name, these two pieces draw the beginning and the end of a translational paradigm; two sides of the same coin that, if completed, could face this extremely complicated problem from start to finish.
+
+To materialize Alpha's and Omega's implementation, we have developed a collection of autonomous modules. Here, you will find a brief presentation for each of the systems developed.
+
+![alt text](https://2021.igem.org/wiki/images/f/f8/T--UPF_Barcelona--all_software.jpg)
+
+
 <!-- TABLE OF CONTENTS -->
-<details>
   <summary>Table of Contents</summary>
   <ol>
     <li>
@@ -15,16 +25,6 @@
     <li><a href="#IRIS">IRIS</a></li>
     <li><a href="#OmegaServer">OmegaServer</a></li>
   </ol>
-</details>
-
-
-# About ARIA's Software
- 
-When dealing with antibiotic resistance, the key consists of properly assisting those who fight for the patients' health in the frontline. To do so, we consider it is necessary to effectively integrate, characterize and synthesize information. Why? Because by using the proper techniques to turn this knowledge into a strong analytic power, tools can be created and deployed to help health workers guide and execute the diagnostic, therapeutic, and managing processes that save lives.
-
-That is precisely the cornerstone of ARIA's computational work, which we called Alpha and Omega. As the letters of the ancient alphabet from which they take their name, these two pieces draw the beginning and the end of a translational paradigm; two sides of the same coin that, if completed, could face this extremely complicated problem from start to finish.
-
-To materialize Alpha's and Omega's implementation, we have developed a collection of autonomous modules. Here, you will find a brief presentation for each of the systems developed.
 
  
  
