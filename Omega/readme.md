@@ -10,7 +10,6 @@
         <li><a href="#Data Organization">Data Organization</a></li>
         <li><a href="#Convolutional Neural Network Subunit Architecture">Convolutional Neural Network Subunit Architecture</a></li>
         <li><a href="#Subunit Generation Workflow">Subunit Generation Workflow</a></li>
-        <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
     
@@ -20,6 +19,7 @@
         <li><a href="#The application">The application</a></li>
       </ul>
     </li>
+    
     <li><a href="#About OmegaServer">OmegaServer</a>
        <ul>
         <li><a href="#Design of the Communication Architecture">Design of the Communication Architecture</a></li>
