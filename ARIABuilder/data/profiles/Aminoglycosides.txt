@@ -1,0 +1,5 @@
+phosphorylation
+acetylation
+nucleotidylation
+efflux
+altered target

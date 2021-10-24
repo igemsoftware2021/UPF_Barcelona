@@ -1,0 +1,6 @@
+hydrolysis
+phosphorylation
+nucleotidylation
+acetylation
+efflux
+altered target
