@@ -21,3 +21,6 @@ Having already done this, we generate for each of the sequences its own set of k
 With the derived set of each sequence, we calculate the union between both, and thus we obtain a new set. The total number of kmers that could exist in both sequences is contained in this new set. Taking each of its elements, and counting how many instances of these exist in both sequences, we will have created two vectors that represent the frequencies of the kmers. As the order has been defined by the union vector, which is unique, both vectors will be consistent.
 
 At this point, we simply have to calculate the cosine distance between both vectors, and multiply the number obtained by 100. The result will be the estimate of the percentage of similarity between both sequences.
+
+
+<p align="right">(<a href="#top">back to top</a>)</p>
