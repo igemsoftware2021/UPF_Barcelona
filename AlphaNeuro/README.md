@@ -1,8 +1,6 @@
 # About AlphaNeuro
 In this repository you will find the set of notebooks that we have used to create AlphaNeuro for the iGEM 2021 competition:
 
-![alt text](https://2021.igem.org/wiki/images/3/33/T--UPF_Barcelona--alphaneuro.GIF)
-
 Organization:
 
   1. Model Training: This folder contains the notebooks used to train the different models for Promiscuity, Virulence and Resistance. Each of the sections contains the particular 
@@ -29,3 +27,7 @@ Organization:
   
   2B. Alternatively, you can generate 2 different output CSV files. The first one will give you the predicted label name for each input sequence while the second encodes the
     labels in different colormaps (RGB values).
+
+
+
+![alt text](https://2021.igem.org/wiki/images/3/33/T--UPF_Barcelona--alphaneuro.GIF)
