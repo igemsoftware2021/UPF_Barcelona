@@ -1,6 +1,8 @@
 # WELCOME TO ARIA's ALPHANEURO!
 In this repository you will find the set of notebooks that we have used to create AlphaNeuro for the iGEM 2021 competition:
 
+![alt text](https://2021.igem.org/Team:UPF_Barcelona/Software_ANeuro)
+
 Organization:
 
   1. Model Training: This folder contains the notebooks used to train the different models for Promiscuity, Virulence and Resistance. Each of the sections contains the particular 
