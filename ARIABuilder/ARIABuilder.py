@@ -493,11 +493,11 @@ class ARIABuilder():
           return biosensor_array
       
       
-      """
-      This last function takes the array design, and it simply saves
-      it as a text file explaining which position is requiered for 
-      each biosensor, and what are the sequences involved.
-      """
+     """
+     This last function takes the array design, and it simply saves
+     it as a text file explaining which position is requiered for 
+     each biosensor, and what are the sequences involved.
+     """
      def save_array(biosensor_array, r_tags, p_tags, v_tags):
          
           m_tags = r_tags+p_tags+v_tags
