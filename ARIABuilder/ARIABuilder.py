@@ -14,7 +14,7 @@ import random
 #This is the main class, which contains the required functions.
 class ARIABuilder():
      
-"""  
+     """  
      This functions saves sequence sets in text files, 
      separating sequences with lines.
      """
@@ -125,7 +125,7 @@ class ARIABuilder():
          
          print("----------------------------------")
          for key in element_dict.keys():
-             print(key.upper()+": "+(", ".join(element_dict[key]))+".")f
+             print(key.upper()+": "+(", ".join(element_dict[key]))+".")
             
              
      #A simple function to load lists from text files.
