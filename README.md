@@ -11,14 +11,8 @@ That is precisely the cornerstone of ARIA's computational work, which we called 
 To materialize Alpha's and Omega's implementation, we have developed a collection of autonomous modules. Here, you will find a brief presentation for each of the systems developed.
 
 
-
-
-
-
 # Table of contents
   <ol>
-    <li>
-      <a href="#about-the-project"> About ARIA's Software</a>
     <li><a href="#AlphaMine">AlphaMine</a></li>
     <li><a href="#AlphaNeuro">AlphaNeuro</a></li>
     <li><a href="#ARIABuiler">ARIABuilder</a></li>
