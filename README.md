@@ -82,8 +82,10 @@ An experimental client-server approach to couple IRIS with OmegaCore, and by doi
  
  # Attributions
  
- Joel Romero Hernández: Designed, implemented, and documented AlphaMine, ARIABuilder, OmegaCore, IRIS, and OmegaServer. Contributed to AlphaNeuro’s design. Created and mantained  this repository.
+ <b>Joel Romero Hernández</b>
+ Designed, implemented, and documented AlphaMine, ARIABuilder, OmegaCore, IRIS, and OmegaServer. Contributed to AlphaNeuro’s design. Created and mantained  this repository.
  
- Isaac Capallera Guirado, Marc Borràs Sánchez & Francesc Carandell Verdaguer: Designed, implemented, documented and curated the data for AlphaNeuro.
+ <b>Isaac Capallera Guirado, Marc Borràs Sánchez & Francesc Carandell Verdaguer</b>
+ Designed, implemented, documented and curated the data for AlphaNeuro.
 
 
