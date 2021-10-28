@@ -19,7 +19,7 @@ To materialize Alpha's and Omega's implementation, we have developed a collectio
     <li><a href="#OmegaCore">OmegaCore</a></li>
     <li><a href="#IRIS">IRIS</a></li>
     <li><a href="#OmegaServer">OmegaServer</a></li>
-    <li><a href="#Atttributions">Attributions</a></li>
+    <li><a href="#Attributions">Attributions</a></li>
   </ol>
 
  
@@ -83,9 +83,11 @@ An experimental client-server approach to couple IRIS with OmegaCore, and by doi
  # Attributions
  
  <b>Joel Romero Hernández</b>
+ 
  Designed, implemented, and documented AlphaMine, ARIABuilder, OmegaCore, IRIS, and OmegaServer. Contributed to AlphaNeuro’s design. Created and mantained  this repository.
  
  <b>Isaac Capallera Guirado, Marc Borràs Sánchez & Francesc Carandell Verdaguer</b>
+ 
  Designed, implemented, documented and curated the data for AlphaNeuro.
 
 
